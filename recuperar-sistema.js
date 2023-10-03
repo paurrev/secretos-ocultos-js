@@ -1,4 +1,4 @@
-export function simulacion({ satelite, estacion, astronauta, texto }) {
+function simulacion({ satelite, estacion, astronauta, texto }) {
   satelite.send({
     from: astronauta,
     to: estacion,
@@ -8,13 +8,13 @@ export function simulacion({ satelite, estacion, astronauta, texto }) {
   return satelite.messages;
 }
 
-export class Astronaut {
+class Astronaut {
   constructor({ name }) {
     this.name = name;
   }
 }
 
-export class SpaceStation {
+class SpaceStation {
   constructor({ name }) {
     this.name = name;
     this.team = [];
@@ -27,17 +27,23 @@ export class SpaceStation {
   }
 }
 
-export class Satelite {
+class Satelite {
   constructor({ name }) {
     this.name = name;
     this.messages = [];
   }
 
   send({ from, to, text }) {
-    this.messages.push({
-      from: from.name,
-      to: to.name,
-      text,
-    });
+    if (
+      from instanceof Astronaut &&
+      to instanceof SpaceStation &&
+      to.team.includes(from.name)
+    ) {
+      this.messages.push({
+        from: from.name,
+        to: to.name,
+        text,
+      });
+    }
   }
 }
