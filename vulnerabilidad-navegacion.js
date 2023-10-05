@@ -6,21 +6,22 @@ function simulador(astronaut, spaceShip, direction) {
 class Astronaut {
   constructor({ name }) {
     this.name = name;
-    this._spaceShipKey = undefined;
+    this[this._spaceShipKey] = Symbol();
   }
 
   setAccessKey(accessKey) {
-    this._spaceShipKey = accessKey;
+    this[this._spaceShipKey] = accessKey;
   }
 
   navigate(spaceShip, direction) {
-    spaceShip.navigator(direction, { accessKey: this._spaceShipKey });
+    spaceShip.navigator(direction, { accessKey: this[this._spaceShipKey] });
   }
 }
 
 class SpaceShip {
   constructor({ key }) {
-    this._key = key;
+    this._key = Symbol();
+    this[this._key] = key
     this._movements = [];
   }
 
@@ -28,12 +29,12 @@ class SpaceShip {
     const isAstronaut = astronaut instanceof Astronaut;
 
     if (isAstronaut) {
-      astronaut.setAccessKey(this._key);
+      astronaut.setAccessKey(this[this._key]);
     }
   }
 
   navigator(direction, { accessKey }) {
-    if (this._key == accessKey) {
+    if (this[this._key] == accessKey) {
       this._movements.push(direction);
     } else {
       this._movements.push('Incorrect Access Key');
