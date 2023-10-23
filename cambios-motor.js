@@ -1,11 +1,14 @@
-class Motor {
+export class Motor {
   constructor(propulsionTo, historyInstance) {
     let status = 'off';
     let history = historyInstance;
 
     this.getStatus = () => status;
     let setStatus = (newStatus) => {
-      status = newStatus;
+      if(status != newStatus){
+        history.addEvent(propulsionTo, historyInstance)
+        status = newStatus;
+      }
     };
 
     this.turnOn = () => setStatus('on');
@@ -15,10 +18,12 @@ class Motor {
   }
 }
 
-class History {
+export class History {
   constructor() {
     let history = [];
 
     this.getFullState = () => history;
-  }
+
+    this.addEvent = (position, status) => history.push({"propulsionTo": position, "status": status}) 
+  } 
 }
